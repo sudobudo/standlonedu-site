@@ -1,0 +1,57 @@
+{
+  "name": "standalone-edu",
+  "version": "1.0.0",
+  "description": "Standalone EDU - K-12 Learning Platform",
+  "main": "script.js",
+  "scripts": {
+    "start": "live-server .",
+    "build": "mkdir -p dist && cp -r *.html *.css *.js dist/ && [ -d assets ] && cp -r assets/ dist/ || echo 'No assets directory found, continuing build'",
+    "build:preview": "npm run build",
+    "build:staging": "NODE_ENV=staging npm run build",
+    "predeploy": "npm run build",
+    "deploy": "netlify deploy --prod",
+    "deploy:staging": "netlify deploy --staging",
+    "deploy:preview": "netlify deploy --build",
+    "test": "echo \"No tests specified\" && exit 0",
+    "netlify:dev": "netlify dev",
+    "netlify:functions:create": "netlify functions:create",
+    "netlify:functions:serve": "netlify functions:serve"
+  },
+  "keywords": ["education", "k12", "learning", "quiz"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@netlify/functions": "^1.4.0",
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "@netlify/plugin-lighthouse": "^5.0.0",
+    "@netlify/plugin-sitemap": "^1.1.0",
+    "netlify-cli": "^15.0.0",
+    "netlify-plugin-sitemap": "^0.12.0"
+  },
+  "engines": {
+    "node": "18.20.8",
+    "npm": "9.0.0"
+  },
+  "netlify": {
+    "build": {
+      "command": "npm run build",
+      "publish": "dist",
+      "environment": {
+        "NODE_VERSION": "18.20.8",
+        "NPM_VERSION": "9.0.0"
+      }
+    },
+    "functions": {
+      "directory": "netlify/functions"
+    },
+    "redirects": [
+      {
+        "from": "/*",
+        "to": "/index.html",
+        "status": 200
+      }
+    ]
+  }
+}

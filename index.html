@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standalone EDU - K-12 Learning Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">Standalone <span class="edu">EDU</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="practice">Practice</a>
+                <a href="#" class="nav-link" data-page="milestones">GA Milestones</a>
+                <a href="#" class="nav-link" data-page="benchmark">Benchmark</a>
+                <a href="#" class="nav-link" data-page="progress">Progress</a>
+                <a href="#" class="nav-link" data-page="friends">Friends</a>
+                <a href="#" class="nav-link" data-page="standards">Standards</a>
+                <a href="#" class="nav-link admin-only" data-page="admin" style="display: none;">Admin</a>
+            </div>
+            <div class="user-info" id="user-info">
+                <button class="btn-login" id="login-btn">Login</button>
+                <button class="btn-signup" id="signup-btn">Sign Up</button>
+            </div>
+            <div class="user-info logged-in" id="user-info-logged-in" style="display: none;">
+                <span class="user-name" id="user-display-name">Student</span>
+                <div class="user-avatar" id="user-avatar">S</div>
+                <div class="user-dropdown">
+                    <a href="#" id="profile-link">Profile</a>
+                    <a href="#" id="logout-link">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="login-modal">&times;</span>
+            <h2>Login to Standalone EDU</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <div class="form-message" id="login-message"></div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+                <p class="form-footer">
+                    <a href="#" id="forgot-password-link">Forgot Password?</a> | 
+                    <a href="#" id="forgot-username-link">Forgot Username?</a><br>
+                    Don't have an account? <a href="#" id="show-signup">Sign up here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="signup-modal">&times;</span>
+            <h2>Create Your Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-fullname">Full Name</label>
+                    <input type="text" id="signup-fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-grade">Grade Level</label>
+                    <select id="signup-grade" required>
+                        <option value="K">Kindergarten</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required>
+                </div>
+                <div class="form-message" id="signup-message"></div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                <p class="form-footer">Already have an account? <a href="#" id="show-login">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Username Modal -->
+    <div class="modal" id="forgot-username-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="forgot-username-modal">&times;</span>
+            <h2>Recover Your Username</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Enter your email address and we'll show you your username.
+            </p>
+            <form id="forgot-username-form">
+                <div class="form-group">
+                    <label for="recover-email">Email Address</label>
+                    <input type="email" id="recover-email" required>
+                </div>
+                <div class="form-message" id="recover-message"></div>
+                <div id="username-display" style="display: none; padding: 1rem; background: #D1FAE5; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0; font-weight: 600; color: var(--text-primary);">Your username is:</p>
+                    <p id="recovered-username" style="margin: 0.5rem 0 0 0; font-size: 1.25rem; font-weight: 700; color: var(--primary-color);"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Find Username</button>
+                <p class="form-footer">
+                    <a href="#" id="back-to-login-from-username">Back to Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgot-password-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="forgot-password-modal">&times;</span>
+            <h2>Reset Your Password</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Enter your username and email to reset your password.
+            </p>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="forgot-username">Username</label>
+                    <input type="text" id="forgot-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="forgot-email">Email</label>
+                    <input type="email" id="forgot-email" required>
+                </div>
+                <div class="form-message" id="forgot-message"></div>
+                <button type="submit" class="btn btn-primary btn-full">Verify Account</button>
+                <p class="form-footer">
+                    <a href="#" id="back-to-login">Back to Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div class="modal" id="reset-password-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="reset-password-modal">&times;</span>
+            <h2>Set New Password</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Enter your new password below.
+            </p>
+            <form id="reset-password-form">
+                <div class="form-group">
+                    <label for="reset-new-password">New Password</label>
+                    <input type="password" id="reset-new-password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="reset-confirm-password">Confirm New Password</label>
+                    <input type="password" id="reset-confirm-password" required minlength="6">
+                </div>
+                <div class="form-message" id="reset-message"></div>
+                <button type="submit" class="btn btn-primary btn-full">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="profile-modal">&times;</span>
+            <h2>My Profile</h2>
+            
+            <!-- Profile Picture Section -->
+            <div class="profile-picture-section">
+                <div class="current-avatar" id="current-avatar-display">
+                    <div class="user-avatar-large" id="profile-avatar-preview">S</div>
+                </div>
+                <div class="profile-picture-upload">
+                    <label for="profile-picture-input" class="upload-label">
+                        📷 Upload Profile Picture
+                    </label>
+                    <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn-secondary" id="remove-picture-btn" style="display: none; margin-top: 0.5rem;">
+                        Remove Picture
+                    </button>
+                    <p class="upload-hint">JPG, PNG, or GIF (max 2MB)</p>
+                </div>
+            </div>
+            
+            <hr style="margin: 2rem 0;">
+            
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="profile-fullname">Full Name</label>
+                    <input type="text" id="profile-fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-email">Email</label>
+                    <input type="email" id="profile-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-grade">Grade Level</label>
+                    <select id="profile-grade" required>
+                        <option value="K">Kindergarten</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile-avatar-color">Avatar Color</label>
+                    <select id="profile-avatar-color">
+                        <option value="default">Default (Purple)</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="red">Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="pink">Pink</option>
+                        <option value="teal">Teal</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile-theme">Theme</label>
+                    <select id="profile-theme">
+                        <option value="light">Light Mode</option>
+                        <option value="dark">Dark Mode</option>
+                        <option value="auto">Auto (System)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile-accent-color">Accent Color</label>
+                    <select id="profile-accent-color">
+                        <option value="indigo">Indigo (Default)</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="purple">Purple</option>
+                        <option value="red">Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="pink">Pink</option>
+                    </select>
+                </div>
+                <div class="form-message" id="profile-message"></div>
+                <button type="submit" class="btn btn-primary btn-full">Update Profile</button>
+            </form>
+            <hr style="margin: 2rem 0;">
+            <h3>Change Password</h3>
+            <form id="password-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-password">Confirm New Password</label>
+                    <input type="password" id="confirm-new-password" required>
+                </div>
+                <div class="form-message" id="password-message"></div>
+                <button type="submit" class="btn btn-secondary btn-full">Change Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Landing Page (Not Logged In) -->
+    <div class="landing-page" id="landing-page">
+        <div class="landing-hero">
+            <div class="landing-content">
+                <h1 class="landing-title">
+                    <span class="wave">👋</span> Join Us at Standalone EDU!
+                </h1>
+                <p class="landing-subtitle">
+                    Your personalized K-12 learning journey starts here
+                </p>
+                <p class="landing-description">
+                    Master every subject with GADOE-aligned questions, track your progress, 
+                    and achieve academic excellence!
+                </p>
+                <div class="landing-buttons">
+                    <button class="btn-landing-primary" id="landing-signup-btn">
+                        🚀 Get Started Free
+                    </button>
+                    <button class="btn-landing-secondary" id="landing-login-btn">
+                        🔑 I Have an Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="landing-features">
+            <h2 class="features-title">Why Choose Standalone EDU?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>K-12 Coverage</h3>
+                    <p>Complete curriculum from Kindergarten through Grade 12</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>GADOE Aligned</h3>
+                    <p>Every question aligned with Georgia Department of Education standards</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your performance with detailed analytics and insights</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Personalize</h3>
+                    <p>Customize themes, colors, and make learning your own</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Instant Feedback</h3>
+                    <p>Get immediate explanations for every answer</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Earn Points</h3>
+                    <p>Collect points and track your achievements</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="landing-subjects">
+            <h2 class="subjects-title">Master Every Subject</h2>
+            <div class="subjects-showcase">
+                <div class="subject-showcase">
+                    <span class="subject-emoji">🔢</span>
+                    <h3>Mathematics</h3>
+                    <p>Algebra • Geometry • Statistics</p>
+                </div>
+                <div class="subject-showcase">
+                    <span class="subject-emoji">📝</span>
+                    <h3>English Language Arts</h3>
+                    <p>Reading • Writing • Grammar</p>
+                </div>
+                <div class="subject-showcase">
+                    <span class="subject-emoji">🔬</span>
+                    <h3>Science</h3>
+                    <p>Biology • Chemistry • Physics</p>
+                </div>
+                <div class="subject-showcase">
+                    <span class="subject-emoji">🌎</span>
+                    <h3>Social Studies</h3>
+                    <p>History • Geography • Civics</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="landing-cta">
+            <h2 class="cta-title">Ready to Start Learning?</h2>
+            <p class="cta-subtitle">Join thousands of students achieving their academic goals</p>
+            <button class="btn-cta" id="landing-cta-btn">
+                Create Your Free Account →
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="home-page" class="page active">
+            <div class="hero-section">
+                <h1 class="hero-title">Welcome to Standalone EDU</h1>
+                <p class="hero-subtitle">Master K-12 subjects aligned with Georgia Department of Education standards</p>
+            </div>
+
+            <div class="grade-selection">
+                <h2 class="section-title">Select Your Grade Level</h2>
+                <div class="grade-grid">
+                    <div class="grade-card" data-grade="K">
+                        <div class="grade-icon">🎨</div>
+                        <h3>Kindergarten</h3>
+                    </div>
+                    <div class="grade-card" data-grade="1">
+                        <div class="grade-icon">📖</div>
+                        <h3>Grade 1</h3>
+                    </div>
+                    <div class="grade-card" data-grade="2">
+                        <div class="grade-icon">✏️</div>
+                        <h3>Grade 2</h3>
+                    </div>
+                    <div class="grade-card" data-grade="3">
+                        <div class="grade-icon">📐</div>
+                        <h3>Grade 3</h3>
+                    </div>
+                    <div class="grade-card" data-grade="4">
+                        <div class="grade-icon">🔬</div>
+                        <h3>Grade 4</h3>
+                    </div>
+                    <div class="grade-card" data-grade="5">
+                        <div class="grade-icon">🌍</div>
+                        <h3>Grade 5</h3>
+                    </div>
+                    <div class="grade-card" data-grade="6">
+                        <div class="grade-icon">📊</div>
+                        <h3>Grade 6</h3>
+                    </div>
+                    <div class="grade-card" data-grade="7">
+                        <div class="grade-icon">🧪</div>
+                        <h3>Grade 7</h3>
+                    </div>
+                    <div class="grade-card" data-grade="8">
+                        <div class="grade-icon">🎓</div>
+                        <h3>Grade 8</h3>
+                    </div>
+                    <div class="grade-card" data-grade="9">
+                        <div class="grade-icon">📚</div>
+                        <h3>Grade 9</h3>
+                    </div>
+                    <div class="grade-card" data-grade="10">
+                        <div class="grade-icon">🔭</div>
+                        <h3>Grade 10</h3>
+                    </div>
+                    <div class="grade-card" data-grade="11">
+                        <div class="grade-icon">💡</div>
+                        <h3>Grade 11</h3>
+                    </div>
+                    <div class="grade-card" data-grade="12">
+                        <div class="grade-icon">🎯</div>
+                        <h3>Grade 12</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subject Selection Page -->
+        <section id="subject-page" class="page">
+            <div class="page-header">
+                <button class="back-btn">← Back</button>
+                <h2 class="page-title">Select a Subject - <span id="selected-grade"></span></h2>
+            </div>
+
+            <div class="subject-grid">
+                <div class="subject-card" data-subject="math">
+                    <div class="subject-icon">🔢</div>
+                    <h3>Mathematics</h3>
+                    <p>Algebra, Geometry, Statistics</p>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+                </div>
+
+                <div class="subject-card" data-subject="ela">
+                    <div class="subject-icon">📝</div>
+                    <h3>English Language Arts</h3>
+                    <p>Reading, Writing, Grammar</p>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+                </div>
+
+                <div class="subject-card" data-subject="science">
+                    <div class="subject-icon">🔬</div>
+                    <h3>Science</h3>
+                    <p>Biology, Chemistry, Physics</p>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+                </div>
+
+                <div class="subject-card" data-subject="social-studies">
+                    <div class="subject-icon">🌎</div>
+                    <h3>Social Studies</h3>
+                    <p>History, Geography, Civics</p>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice/Quiz Page -->
+        <section id="practice-page" class="page">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <button class="back-btn">← Back to Subjects</button>
+                    <div class="quiz-info">
+                        <h3 id="quiz-subject"></h3>
+                        <p id="quiz-standard"></p>
+                    </div>
+                    <div class="quiz-stats">
+                        <div class="stat">
+                            <span class="stat-label">Question</span>
+                            <span class="stat-value"><span id="current-question">1</span>/<span id="total-questions">10</span></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Score</span>
+                            <span class="stat-value" id="quiz-score">0</span>
+                        </div>
+                        <div class="stat smartscore-stat">
+                            <span class="stat-label">SmartScore</span>
+                            <div class="smartscore-container">
+                                <div class="smartscore-bar">
+                                    <div class="smartscore-fill" id="smartscore-fill"></div>
+                                </div>
+                                <span class="smartscore-value" id="smartscore-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-text" id="question-text"></div>
+                    <div class="question-image" id="question-image"></div>
+                    
+                    <!-- Hint System -->
+                    <div class="hint-container" id="hint-container" style="display: none;">
+                        <button class="btn-hint" id="show-hint-btn">💡 Show Hint</button>
+                        <div class="hint-text" id="hint-text" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="answers-container" id="answers-container"></div>
+                </div>
+
+                <div class="quiz-controls">
+                    <button class="btn btn-secondary" id="submit-answer-btn" disabled>Submit Answer</button>
+                    <button class="btn btn-primary" id="next-question-btn" style="display: none;">Next Question</button>
+                    <button class="btn btn-outline" id="skip-question-btn">Skip Question</button>
+                </div>
+
+                <div class="feedback-container" id="feedback-container"></div>
+            </div>
+        </section>
+
+        <!-- Progress Page -->
+        <section id="progress-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">Your Progress</h2>
+            </div>
+
+            <div class="progress-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-content">
+                            <h4>Questions Answered</h4>
+                            <p class="stat-number" id="total-answered">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <h4>Correct Answers</h4>
+                            <p class="stat-number" id="total-correct">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h4>Accuracy Rate</h4>
+                            <p class="stat-number" id="accuracy-rate">0%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-content">
+                            <h4>Total Points</h4>
+                            <p class="stat-number" id="total-points">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subject-progress-section">
+                    <h3>Progress by Subject</h3>
+                    <div id="subject-progress-list"></div>
+                </div>
+                
+                <!-- Learning Insights -->
+                <div class="learning-insights-section">
+                    <h3>📊 Learning Insights</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <div class="insight-icon">🔥</div>
+                            <div class="insight-content">
+                                <h4>Current Streak</h4>
+                                <p class="insight-value" id="current-streak">0 days</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">⭐</div>
+                            <div class="insight-content">
+                                <h4>Best Subject</h4>
+                                <p class="insight-value" id="best-subject">Keep practicing!</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">💪</div>
+                            <div class="insight-content">
+                                <h4>Focus Area</h4>
+                                <p class="insight-value" id="focus-area">Start learning!</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">🎯</div>
+                            <div class="insight-content">
+                                <h4>Accuracy Rate</h4>
+                                <p class="insight-value" id="accuracy-rate">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GA Milestones Assessment Page -->
+        <section id="milestones-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">🎓 Georgia Milestones Assessment</h2>
+                <p class="page-subtitle">Practice with realistic Georgia Milestones test conditions</p>
+            </div>
+
+            <div class="test-info-card">
+                <h3>About Georgia Milestones</h3>
+                <p>The Georgia Milestones Assessment System is a comprehensive assessment program spanning grades 3-12. It measures how well students have learned the knowledge and skills outlined in the state-adopted content standards.</p>
+                
+                <div class="test-features">
+                    <div class="feature-item">✓ Timed sections</div>
+                    <div class="feature-item">✓ Multiple question types</div>
+                    <div class="feature-item">✓ Realistic test format</div>
+                    <div class="feature-item">✓ Detailed score reports</div>
+                </div>
+            </div>
+
+            <div class="test-selection">
+                <h3>Select Your Test</h3>
+                <div class="test-cards">
+                    <div class="test-card" onclick="startMilestones('ela')">
+                        <div class="test-icon">📝</div>
+                        <h4>English Language Arts</h4>
+                        <p>Reading, Writing, Language</p>
+                        <div class="test-details">
+                            <span>⏱️ 90 minutes</span>
+                            <span>📋 40 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Test</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startMilestones('math')">
+                        <div class="test-icon">🔢</div>
+                        <h4>Mathematics</h4>
+                        <p>Problem Solving, Reasoning</p>
+                        <div class="test-details">
+                            <span>⏱️ 90 minutes</span>
+                            <span>📋 40 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Test</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startMilestones('science')">
+                        <div class="test-icon">🔬</div>
+                        <h4>Science</h4>
+                        <p>Scientific Inquiry, Concepts</p>
+                        <div class="test-details">
+                            <span>⏱️ 80 minutes</span>
+                            <span>📋 35 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Test</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startMilestones('social-studies')">
+                        <div class="test-icon">🌎</div>
+                        <h4>Social Studies</h4>
+                        <p>History, Geography, Civics</p>
+                        <div class="test-details">
+                            <span>⏱️ 80 minutes</span>
+                            <span>📋 35 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Test</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benchmark Assessment Page -->
+        <section id="benchmark-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">📊 NWEA MAP Benchmark Assessment</h2>
+                <p class="page-subtitle">Adaptive benchmark testing to measure academic growth</p>
+            </div>
+
+            <div class="test-info-card">
+                <h3>About NWEA MAP Testing</h3>
+                <p>NWEA MAP (Measures of Academic Progress) is a computerized adaptive test that adjusts difficulty based on student responses. It provides precise measurement of student achievement and growth over time.</p>
+                
+                <div class="test-features">
+                    <div class="feature-item">✓ Adaptive difficulty</div>
+                    <div class="feature-item">✓ Personalized testing</div>
+                    <div class="feature-item">✓ RIT score reporting</div>
+                    <div class="feature-item">✓ Growth tracking</div>
+                </div>
+            </div>
+
+            <div class="test-selection">
+                <h3>Select Your Assessment</h3>
+                <div class="test-cards">
+                    <div class="test-card" onclick="startBenchmark('reading')">
+                        <div class="test-icon">📖</div>
+                        <h4>MAP Reading</h4>
+                        <p>Comprehension, Vocabulary</p>
+                        <div class="test-details">
+                            <span>⏱️ Untimed</span>
+                            <span>📋 40-53 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Assessment</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startBenchmark('math')">
+                        <div class="test-icon">➗</div>
+                        <h4>MAP Mathematics</h4>
+                        <p>Operations, Problem Solving</p>
+                        <div class="test-details">
+                            <span>⏱️ Untimed</span>
+                            <span>📋 40-53 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Assessment</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startBenchmark('language')">
+                        <div class="test-icon">✍️</div>
+                        <h4>MAP Language Usage</h4>
+                        <p>Grammar, Mechanics, Writing</p>
+                        <div class="test-details">
+                            <span>⏱️ Untimed</span>
+                            <span>📋 40-53 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Assessment</button>
+                    </div>
+                    
+                    <div class="test-card" onclick="startBenchmark('science')">
+                        <div class="test-icon">⚗️</div>
+                        <h4>MAP Science</h4>
+                        <p>Scientific Practices, Concepts</p>
+                        <div class="test-details">
+                            <span>⏱️ Untimed</span>
+                            <span>📋 40-53 questions</span>
+                        </div>
+                        <button class="btn btn-primary">Start Assessment</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="benchmark-info">
+                <h3>Understanding Your RIT Score</h3>
+                <div class="rit-scale">
+                    <div class="rit-item">
+                        <span class="rit-range">140-160</span>
+                        <span class="rit-label">Below Average</span>
+                    </div>
+                    <div class="rit-item">
+                        <span class="rit-range">160-180</span>
+                        <span class="rit-label">Average</span>
+                    </div>
+                    <div class="rit-item">
+                        <span class="rit-range">180-200</span>
+                        <span class="rit-label">Above Average</span>
+                    </div>
+                    <div class="rit-item">
+                        <span class="rit-range">200-220</span>
+                        <span class="rit-label">Advanced</span>
+                    </div>
+                    <div class="rit-item">
+                        <span class="rit-range">220+</span>
+                        <span class="rit-label">Exceptional</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Friends Page -->
+        <section id="friends-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">👥 Friends</h2>
+                <p class="page-subtitle">Connect with other learners</p>
+            </div>
+
+            <!-- Friend Requests -->
+            <div class="friends-section" id="friend-requests-section">
+                <h3>📬 Friend Requests</h3>
+                <div id="friend-requests-list"></div>
+            </div>
+
+            <!-- Search Users -->
+            <div class="friends-section">
+                <h3>🔍 Find Friends</h3>
+                <div class="search-box">
+                    <input type="text" id="user-search-input" placeholder="Search by username or name...">
+                    <button class="btn btn-primary" id="search-users-btn">Search</button>
+                </div>
+                <div id="search-results"></div>
+            </div>
+
+            <!-- My Friends -->
+            <div class="friends-section">
+                <h3>👫 My Friends</h3>
+                <div id="friends-list"></div>
+            </div>
+        </section>
+
+        <!-- Chat Modal -->
+        <div class="modal" id="chat-modal">
+            <div class="modal-content chat-modal-content">
+                <span class="close-modal" data-modal="chat-modal">&times;</span>
+                <div class="chat-header">
+                    <div class="chat-user-info">
+                        <div class="chat-avatar" id="chat-user-avatar">U</div>
+                        <div>
+                            <h3 id="chat-user-name">User</h3>
+                            <p id="chat-user-status">Online</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500">
+                    <button class="btn btn-primary" id="send-message-btn">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Page -->
+        <section id="admin-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">⚙️ Admin Dashboard</h2>
+                <p class="page-subtitle">Manage Standalone EDU</p>
+            </div>
+
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h4>Total Users</h4>
+                        <p class="stat-number" id="admin-total-users">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-content">
+                        <h4>Total Questions</h4>
+                        <p class="stat-number" id="admin-total-questions">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3>All Users</h3>
+                <div id="admin-users-list"></div>
+            </div>
+        </section>
+
+        <!-- Standards Page -->
+        <section id="standards-page" class="page">
+            <div class="page-header">
+                <h2 class="page-title">GADOE Standards</h2>
+                <p class="page-subtitle">Aligned with Georgia Department of Education K-12 Standards</p>
+            </div>
+
+            <div class="standards-info">
+                <div class="info-card">
+                    <h3>📚 Mathematics Standards</h3>
+                    <p>Our math curriculum covers Number & Operations, Algebra, Geometry, Measurement, and Data Analysis aligned with Georgia Standards of Excellence (GSE).</p>
+                </div>
+                <div class="info-card">
+                    <h3>📝 English Language Arts Standards</h3>
+                    <p>ELA content includes Reading Literary & Informational Texts, Writing, Speaking & Listening, and Language standards.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🔬 Science Standards</h3>
+                    <p>Science curriculum follows Georgia Performance Standards covering Physical Science, Earth Science, Life Science, and Scientific Inquiry.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🌎 Social Studies Standards</h3>
+                    <p>Social Studies content aligns with Georgia standards for History, Geography, Government/Civics, and Economics.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

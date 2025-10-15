@@ -1,0 +1,103 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18.20.8"
+  NPM_VERSION = "9.0.0"
+  YARN_VERSION = "1.22.0"
+  NODE_ENV = "production"
+  CI = "false"
+
+[dev]
+  command = "npm start"
+  port = 3000
+  publish = "dist"
+  targetPort = 3000
+  autoLaunch = true
+
+# Redirects for SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache control for static assets
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Environment variables (example - add your own)
+[context.production.environment]
+  BASE_URL = "https://your-site-url.netlify.app"
+  API_URL = "https://api.your-service.com"
+
+[context.deploy-preview]
+  command = "npm run build:preview"
+
+[context.branch-deploy]
+  command = "npm run build:staging"
+  environment = { NODE_ENV = "staging" }
+
+# Build plugins
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+# Functions configuration
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@netlify/functions"]
+
+# Edge functions (if needed)
+[[edge_functions]]
+  path = "/*"
+  function = "edge-function"
+
+# Form handling (if using Netlify Forms)
+[[redirects]]
+  from = "/submit-form"
+  to = "/.netlify/functions/handle-form"
+  status = 200
+
+# Large media (if using Netlify Large Media)
+[[plugins]]
+  package = "@netlify/plugin-labs"
+  [plugins.inputs]
+    path = ".lilconfig.js"
+    npm = "@netlify/large-media"
+
+[context.production]
+  command = "npm run build"
+  publish = "dist"
+
+[context.deploy-preview]
+  publish = "dist"
+
+[context.branch-deploy]
+  publish = "dist"
